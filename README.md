@@ -6,7 +6,7 @@
 ## Installing
 
 ```shell
-$ composer require jkb/oauth -vvv
+$ composer require fengxing2017/oauth -vvv
 ```
 
 ## Usage
