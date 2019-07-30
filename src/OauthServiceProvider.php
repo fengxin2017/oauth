@@ -21,7 +21,7 @@ class OauthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $routeMiddleware = [
-        'jkb.origin.check' => OringinCheck::class
+        'origin.check' => OringinCheck::class
     ];
 
     /**
@@ -30,7 +30,7 @@ class OauthServiceProvider extends ServiceProvider
     protected $middlewareGroups = [
         'jkb' => [
             'auth:jkb',
-            'jkb.origin.check'
+            'origin.check'
         ],
     ];
 
