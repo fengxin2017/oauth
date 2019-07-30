@@ -1,6 +1,6 @@
 <?php
 
-namespace Jkb\Oauth\Auth;
+namespace JKB\Oauth\Auth;
 
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jkb\Oauth\Middleware;
+namespace JKB\Oauth\Middleware;
 
 use Illuminate\Http\Request;
 

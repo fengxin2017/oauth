@@ -1,12 +1,12 @@
 <?php
 
-namespace Jkb\Oauth;
+namespace JKB\Oauth;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use Jkb\Oauth\Auth\UserGuard;
-use Jkb\Oauth\Auth\UserProvider;
-use Jkb\Oauth\Middleware\OringinCheck;
+use JKB\Oauth\Auth\UserGuard;
+use JKB\Oauth\Auth\UserProvider;
+use JKB\Oauth\Middleware\OringinCheck;
 
 class OauthServiceProvider extends ServiceProvider
 {

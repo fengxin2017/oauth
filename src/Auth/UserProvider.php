@@ -1,6 +1,6 @@
 <?php
 
-namespace Jkb\Oauth\Auth;
+namespace JKB\Oauth\Auth;
 
 use Carbon\Carbon;
 use Firebase\JWT\JWT;

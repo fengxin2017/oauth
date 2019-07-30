@@ -1,5 +1,5 @@
 {
-    "name": "jkb/oauth",
+    "name": "JKB/Oauth",
     "description": "a simple oauth for api",
     "license": "MIT",
     "authors": [
@@ -13,13 +13,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Jkb\\Oauth\\": "src"
+            "JKB\\Oauth\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Jkb\\Oauth\\OauthServiceProvider"
+                "JKB\\Oauth\\OauthServiceProvider"
             ]
         }
     }

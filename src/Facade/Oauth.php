@@ -1,8 +1,8 @@
 <?php
 
-namespace Jkb\Oauth\Facade;
+namespace JKB\Oauth\Facade;
 
-use Jkb\Oauth\OauthManager;
+use JKB\Oauth\OauthManager;
 use Illuminate\Support\Facades\Facade;
 
 class Oauth extends Facade
