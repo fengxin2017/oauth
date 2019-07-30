@@ -1,6 +1,6 @@
 <?php
 
-namespace JKB\Oauth\Auth;
+namespace Fengxing2017\Oauth\Auth;
 
 trait Authenticatable
 {

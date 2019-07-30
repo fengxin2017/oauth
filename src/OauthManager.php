@@ -1,6 +1,6 @@
 <?php
 
-namespace JKB\Oauth;
+namespace Fengxing2017\Oauth;
 
 use Carbon\Carbon;
 use Firebase\JWT\JWT;

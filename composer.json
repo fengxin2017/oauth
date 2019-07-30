@@ -1,6 +1,6 @@
 {
-    "name": "JKB/Oauth",
-    "description": "a simple oauth for api",
+    "name": "Fengxing2017/Oauth",
+    "description": "a simple oauth for api!",
     "license": "MIT",
     "authors": [
         {
@@ -13,13 +13,13 @@
     },
     "autoload": {
         "psr-4": {
-            "JKB\\Oauth\\": "src"
+            "Fengxing2017\\Oauth\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "JKB\\Oauth\\OauthServiceProvider"
+                "Fengxing2017\\Oauth\\OauthServiceProvider"
             ]
         }
     }

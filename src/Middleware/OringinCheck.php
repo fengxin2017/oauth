@@ -1,6 +1,6 @@
 <?php
 
-namespace JKB\Oauth\Middleware;
+namespace Fengxing2017\Oauth\Middleware;
 
 use Illuminate\Http\Request;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace JKB\Oauth;
+namespace Fengxing2017\Oauth;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use JKB\Oauth\Auth\UserGuard;
-use JKB\Oauth\Auth\UserProvider;
-use JKB\Oauth\Middleware\OringinCheck;
+use Fengxing2017\Oauth\Auth\UserGuard;
+use Fengxing2017\Oauth\Auth\UserProvider;
+use Fengxing2017\Oauth\Middleware\OringinCheck;
 
 class OauthServiceProvider extends ServiceProvider
 {

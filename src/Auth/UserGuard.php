@@ -1,6 +1,6 @@
 <?php
 
-namespace JKB\Oauth\Auth;
+namespace Fengxing2017\Oauth\Auth;
 
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
