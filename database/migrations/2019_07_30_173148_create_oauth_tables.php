@@ -14,7 +14,7 @@ class CreateOauthTables extends Migration
     public function up()
     {
         Schema::create(config('jkb.database_table_name'), function (Blueprint $table) {
-            $table->string('token', 200);
+            $table->string('token', 200)->primary();
             $table->string('role_type', 50);
             $table->integer('role_id');
             $table->string('role_class', 50);
