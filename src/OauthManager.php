@@ -177,6 +177,6 @@ class OauthManager
      */
     private function storeCacheToken($token, $role, $roleClass)
     {
-        Cache::tags([$this->cacheTag])->put($roleClass . '@' . $role->id, $token, $this->expireTime);
+        Cache::tags([$this->cacheTag])->put($roleClass . '@' . $role->id, $token, Carbon::now()->addSeconds($this->expireTime));
     }
 }
