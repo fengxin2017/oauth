@@ -93,7 +93,7 @@ class OauthManager
     private function dropDatabaseToken($role, $roleClass)
     {
         if (true === $this->reToken) {
-            $this->oauthModel::where('role_id', $role->id)->where('role_type', $roleClass)->delete();
+            $this->oauthModel::where('role_id', $role->id)->where('role_class', $roleClass)->delete();
         }
     }
 
