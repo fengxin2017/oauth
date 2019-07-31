@@ -45,10 +45,6 @@ class UserGuard implements Guard
      */
     public function check()
     {
-        if ($this->shouldExcept()) {
-            return true;
-        }
-
         return !is_null($this->user());
     }
 
