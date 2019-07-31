@@ -145,16 +145,25 @@ class UserProvider implements Provider
     private function getCacheUser($accessToken)
     {
         try {
-            $jwt = JWT::decode($accessToken, $this->key, ['HS256']);
+            $jwt = $this->getJWTOrigin($accessToken);
 
             if ($accessToken != $this->accessTokenByCachekey($jwt->cache_key)) {
                 return null;
             }
 
-            return app($jwt->role_class, collect($jwt->role)->toArray());
+            return new $jwt->role_class(collect($jwt->role)->toArray());
         } catch (\Exception $exception) {
             return null;
         }
+    }
+
+    /**
+     * @param $accessToken
+     * @return object
+     */
+    private function getJWTOrigin($accessToken)
+    {
+        return JWT::decode($accessToken, $this->key, ['HS256']);
     }
 
     /**
