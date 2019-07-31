@@ -18,14 +18,10 @@ class UserGuard implements Guard
     protected $request;
 
     /**
-     * @var string
+     * @var
      */
     protected $inputKey;
 
-    /**
-     * @var \Illuminate\Config\Repository|mixed
-     */
-    protected $exceptKey;
     /**
      * @var string
      */
@@ -41,7 +37,6 @@ class UserGuard implements Guard
         $this->request = $request;
         $this->provider = $provider;
         $this->inputKey = config('jkb.authorization_key', 'Authorization');
-        $this->exceptKey = config('jkb.except_value', 'foxriver');
     }
 
     /**
@@ -80,17 +75,6 @@ class UserGuard implements Guard
     public function validate(array $credentials = [])
     {
 
-    }
-
-    /**
-     * @return bool
-     */
-    private function shouldExcept()
-    {
-        if ($this->request->key == $this->exceptKey) {
-            return true;
-        }
-        return false;
     }
 
     /**

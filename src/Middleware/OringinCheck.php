@@ -3,9 +3,16 @@
 namespace Fengxing2017\Oauth\Middleware;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class OringinCheck
 {
+    /**
+     * 域名验证
+     * @param Request $request
+     * @param \Closure $next
+     * @return mixed
+     */
     public function handle(Request $request, \Closure $next)
     {
         if (in_array('*', config('jkb.allowed_origins'))) {
@@ -13,9 +20,7 @@ class OringinCheck
         }
 
         if (!in_array(request()->header('origin'), config('jkb.allowed_origins'))) {
-            return response()->json([
-                'message' => 'forbidden'
-            ], 403);
+            throw new AccessDeniedHttpException();
         }
 
         return $next($request);

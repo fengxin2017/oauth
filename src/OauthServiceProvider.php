@@ -2,11 +2,11 @@
 
 namespace Fengxing2017\Oauth;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ServiceProvider;
 use Fengxing2017\Oauth\Auth\UserGuard;
 use Fengxing2017\Oauth\Auth\UserProvider;
 use Fengxing2017\Oauth\Middleware\OringinCheck;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ServiceProvider;
 
 class OauthServiceProvider extends ServiceProvider
 {
@@ -27,13 +27,7 @@ class OauthServiceProvider extends ServiceProvider
     /**
      * @var array
      */
-    protected $middlewareGroups = [
-        'jkb' => [
-            'auth:jkb',
-            'origin.check'
-        ],
-    ];
-
+    protected $middlewareGroups;
 
     /**
      * register
@@ -41,12 +35,14 @@ class OauthServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerOauthManager();
+        $this->setJkbAuthConfig();
+        $this->initMiddlewareGroups();
+        $this->addCustomizeMiddlewares();
         $this->registerOauthMiddleware();
-        $this->loadJkbAuthConfig();
     }
 
     /**
-     * register jkbOauthManager
+     * 注册服务提供者
      */
     protected function registerOauthManager()
     {
@@ -56,16 +52,54 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup jkb auth configuration.
+     * 初始化认证
      * @return void
      */
-    protected function loadJkbAuthConfig()
+    protected function setJkbAuthConfig()
     {
-        config(array_dot(config('jkb.auth', []), 'auth.'));
+        config(array_dot([
+            'guards' => [
+                'jkb' => [
+                    'driver'   => 'jkb-guard',
+                    'provider' => 'jkb'
+                ]
+            ],
+
+            'providers' => [
+                'jkb' => [
+                    'driver' => 'jkb-provider',
+                ],
+            ],
+        ], 'auth.'));
     }
 
     /**
-     * registerOauthRoutes
+     * 初始化中间件组
+     */
+    protected function initMiddlewareGroups()
+    {
+        $this->middlewareGroups = [
+            config('jkb.middleware_group_name', 'jkb') => [
+                'auth:jkb',
+                'jkb.origin.check',
+            ],
+        ];
+    }
+
+    /**
+     * 注册用户自定义中间件
+     */
+    protected function addCustomizeMiddlewares()
+    {
+        if ($middlewares = config('jkb.customize_middlewares', [])) {
+            foreach ($middlewares as $middleware) {
+                $this->middlewareGroups[config('jkb.middleware_group_name', 'jkb')][] = $middleware;
+            }
+        }
+    }
+
+    /**
+     * 注册中间件
      */
     protected function registerOauthMiddleware()
     {
@@ -79,8 +113,10 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * register UserProvider
-     * register JkbGuard
+     * 加载获取token路由
+     * 注册认证提供者
+     * 扩展认证守卫
+     * 发布文件
      */
     public function boot()
     {
@@ -90,21 +126,21 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * register UserProvider
+     * 注册认证提供者
      */
     private function registerProvider()
     {
-        Auth::provider(config('jkb.auth.providers.jkb.driver'), function () {
+        Auth::provider('jkb-provider', function () {
             return app(UserProvider::class);
         });
     }
 
     /**
-     * register JkbGuard
+     * 扩展守卫
      */
     private function registerGuard()
     {
-        Auth::extend(config('jkb.auth.guards.jkb.driver'), function ($app, $name, array $config) {
+        Auth::extend('jkb-guard', function ($app, $name, array $config) {
             return app()->make(UserGuard::class, [
                 'provider' => Auth::createUserProvider($config['provider']),
                 'request'  => $app->request,
@@ -113,7 +149,7 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * VendorPublish
+     * 发布配置及数据库迁移文件
      */
     private function vendorPublish()
     {

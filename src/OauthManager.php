@@ -3,21 +3,41 @@
 namespace Fengxing2017\Oauth;
 
 use Carbon\Carbon;
+use Fengxing2017\Oauth\Events\AccessTokenCreated;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 
 class OauthManager
 {
-    public $key;
+    /**
+     * @var
+     */
+    public $jwtKey;
 
+    /**
+     * @var
+     */
     public $dirver;
 
+    /**
+     * @var
+     */
     public $expireTime;
 
+    /**
+     * @var
+     */
     public $createTokenMethodName;
 
+    /**
+     * @var
+     */
     public $storeTokenMethodName;
 
+    /**
+     * @var
+     */
     public $dropTokenMethodName;
 
     /**
@@ -30,11 +50,11 @@ class OauthManager
     }
 
     /**
-     * init Config
+     * 初始化配置属性
      */
     private function initConfig()
     {
-        $this->key = config('jkb.jwt_key', 'Fantastic.Taylor.Otwell');
+        $this->jwtKey = config('jkb.jwt_key', 'Fantastic.Taylor.Otwell');
         $this->dirver = config('jkb.driver', 'cache');
         $this->cacheTag = config('jkb.cache_tag');
         $this->reToken = config('jkb.retoken');
@@ -43,7 +63,7 @@ class OauthManager
     }
 
     /**
-     * init MethodName
+     * 初始化驱动方法名
      */
     private function initMethodName()
     {
@@ -53,92 +73,96 @@ class OauthManager
     }
 
     /**
+     * 生成Token
      * @param $role
-     * @param $roleType
      * @param $roleClass
      * @return string
      */
-    public function generateToken($role, $roleType, $roleClass)
+    public function generateToken($role, $roleClass)
     {
-        $this->{$this->dropTokenMethodName}($role, $roleType);
+        $this->{$this->dropTokenMethodName}($role, $roleClass);
 
-        $token = $this->createOauthToken($role, $roleType, $roleClass);
-        ding()->text($token);
-        return $token;
+        return $this->createOauthToken($role, $roleClass);
     }
 
     /**
+     * 根据配置决定是否删除数据库Token
      * @param $role
-     * @param $roleType
+     * @param $roleClass
      */
-    private function dropDatabaseToken($role, $roleType)
+    private function dropDatabaseToken($role, $roleClass)
     {
         if (true === $this->reToken) {
-            $this->oauthModel::where('role_id', $role->id)->where('role_type', $roleType)->delete();
+            $this->oauthModel::where('role_id', $role->id)->where('role_type', $roleClass)->delete();
         }
     }
 
     /**
+     * 根据配置决定是否删除缓存Token
      * @param $role
-     * @param $roleType
+     * @param $roleClass
      */
-    private function dropCacheToken($role, $roleType)
+    private function dropCacheToken($role, $roleClass)
     {
         if (true == $this->reToken) {
-            Cache::tags([$this->cacheTag])->pull($roleType . '@' . $role->id);
+            Cache::tags([$this->cacheTag])->pull($roleClass . '@' . $role->id);
         }
     }
 
     /**
+     * 创建新Token
      * @param $role
-     * @param $roleType
      * @param $roleClass
      * @return string
      */
-    private function createOauthToken($role, $roleType, $roleClass)
+    private function createOauthToken($role, $roleClass)
     {
-
-        return tap($this->{$this->createTokenMethodName}($role, $roleType, $roleClass), function ($token) use ($role, $roleType, $roleClass) {
-            $this->{$this->storeTokenMethodName}($token, $role, $roleType, $roleClass);
+        return tap($this->{$this->createTokenMethodName}($role, $roleClass), function ($token) use ($role, $roleClass) {
+            $this->{$this->storeTokenMethodName}($token, $role, $roleClass);
         });
     }
 
     /**
+     * 创建新数据库Token | 派发时间
      * @param $role
-     * @param $roleType
+     * @param $roleClass
      * @return string
      */
-    private function createDatabaseToken($role, $roleType, $roleClass)
+    private function createDatabaseToken($role, $roleClass)
     {
-        return md5($roleType . $role->id . time());
+        return tap(md5($roleClass . $role->id . time()), function ($token) use ($role) {
+            Event::dispatch(new AccessTokenCreated($token, $role->id, 'database'));
+        });
     }
 
     /**
+     * 创建新缓存Token | 派发时间
      * @param $role
+     * @param $roleClass
      * @return string
      */
-    private function createCacheToken($role, $roleType, $roleClass)
+    private function createCacheToken($role, $roleClass)
     {
-        return JWT::encode([
+        return tap(JWT::encode([
             'role'       => $role,
-            'cache_key'  => $roleType . '@' . $role->id,
-            'role_type'  => $roleType,
+            'cache_key'  => $roleClass . '@' . $role->id,
             'role_class' => $roleClass,
             'time'       => time(),
-        ], $this->key);
+        ], $this->jwtKey), function ($token) use ($role) {
+            Event::dispatch(new AccessTokenCreated($token, $role->id, 'cache'));
+        });
     }
 
     /**
+     * 保存数据库token
      * @param $token
      * @param $role
-     * @param $roleType
      * @param $roleClass
      */
-    private function storeDatabaseToken($token, $role, $roleType, $roleClass)
+    private function storeDatabaseToken($token, $role, $roleClass)
     {
         $this->oauthModel::create([
             'token'      => $token,
-            'role_type'  => $roleType,
             'role_id'    => $role->id,
             'role_class' => $roleClass,
             'expired_at' => Carbon::now()->addSeconds($this->expireTime)
@@ -146,13 +170,13 @@ class OauthManager
     }
 
     /**
+     * 保存缓存token
      * @param $token
      * @param $role
-     * @param $roleType
      * @param $roleClass
      */
-    private function storeCacheToken($token, $role, $roleType, $roleClass)
+    private function storeCacheToken($token, $role, $roleClass)
     {
-        Cache::tags([$this->cacheTag])->put($roleType . '@' . $role->id, $token, $this->expireTime);
+        Cache::tags([$this->cacheTag])->put($roleClass . '@' . $role->id, $token, $this->expireTime);
     }
 }

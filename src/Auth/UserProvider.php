@@ -23,7 +23,7 @@ class UserProvider implements Provider
     /**
      * @var
      */
-    public $key;
+    public $jwtKey;
 
     /**
      * @var
@@ -45,18 +45,18 @@ class UserProvider implements Provider
     }
 
     /**
-     * init Config
+     * 初始化配置属性
      */
     private function initConfig()
     {
         $this->driver = config('jkb.driver', 'database');
-        $this->key = config('jkb.jwt_key', 'Fantastic.Taylor.Otwell');
+        $this->jwtKey = config('jkb.jwt_key', 'Fantastic.Taylor.Otwell');
         $this->cacheTag = config('jkb.cache_tag');
         $this->oauthModel = config('jkb.oauth_model');
     }
 
     /**
-     * init MethodName
+     * 初始化驱动方法名
      */
     private function initMethodName()
     {
@@ -117,6 +117,7 @@ class UserProvider implements Provider
     }
 
     /**
+     * 获取数据库认证用户
      * @param $accessToken
      * @return null
      */
@@ -139,6 +140,7 @@ class UserProvider implements Provider
     }
 
     /**
+     * 获取缓存认证用户
      * @param $accessToken
      * @return null
      */
@@ -158,15 +160,17 @@ class UserProvider implements Provider
     }
 
     /**
+     * 提取jwt数据
      * @param $accessToken
      * @return object
      */
     private function getJWTOrigin($accessToken)
     {
-        return JWT::decode($accessToken, $this->key, ['HS256']);
+        return JWT::decode($accessToken, $this->jwtKey, ['HS256']);
     }
 
     /**
+     * 通过jwt获取缓存数据
      * @param $cacheKey
      * @return mixed
      */
