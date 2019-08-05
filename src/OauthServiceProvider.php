@@ -99,14 +99,12 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * 加载获取token路由
      * 注册认证提供者
      * 注册认证守卫
      * 发布文件
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes.php');
         $this->registerProvider();
         $this->registerGuard();
         $this->vendorPublish();

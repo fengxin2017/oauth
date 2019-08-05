@@ -58,9 +58,15 @@ class OauthManager
      * @param $roleClass
      * @return string
      */
-    public function generateToken($role, $guard)
+    public function generateTokenFor($role, $guard = null)
     {
-        $this->setGuard($guard);
+        if(!is_null($guard)){
+            $this->setGuard($guard);
+        }
+
+        if(is_null($this->guard)){
+            throw new \Exception('No Guard Provided!');
+        }
 
         $this->initConfig();
 
@@ -195,6 +201,9 @@ class OauthManager
         $this->guard = $guard;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGuard()
     {
         return $this->guard;
