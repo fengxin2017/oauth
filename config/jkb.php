@@ -25,8 +25,8 @@ return [
     |--------------------------------------------------------------------------
     | 可自定义多个guards
     | eg .
-    | Route::middleware('foo')->group(){}
-    | Route::middleware('bar')->group(){}
+    | Route::middleware('auth:foo')->group(){}
+    | Route::middleware('auth:bar')->group(){}
     */
     'guards' => [
         /*
