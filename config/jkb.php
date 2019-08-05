@@ -8,7 +8,7 @@ return [
     | 如果使用数据库需要配置相应模型.
     |
     */
-    'oauth_model' => \App\Models\Admin\JkbOauthToken::class,
+    'oauth_model' => \App\JkbOauthToken::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -51,15 +51,15 @@ return [
             | 认证前中间件
             |--------------------------------------------------------------------------
             | 可以在认证前触发自定义中间件
-            | eg. [App\Api\Oauth\Middleware\JKBrule::class]
+            | eg. [App\Http\Middleware\Foo::class,App\Http\Middleware\Bar::classs]
             */
-            'before_auth' => [\App\Api\Oauth\Middleware\OringinCheck::class],
+            'before_auth' => [\Fengxing2017\Oauth\Middleware\OringinCheck::class],
 
             /*
             |--------------------------------------------------------------------------
             | 验证前中间件
             |--------------------------------------------------------------------------
-            | 认证完成后在验证用户前触发自定义中间件
+            | 检索认证模型后验证用户前触发自定义中间件
             |
             */
             'before_check' => [],
@@ -135,15 +135,15 @@ return [
             | 认证前中间件
             |--------------------------------------------------------------------------
             | 可以在认证前触发自定义中间件
-            | eg. [App\Api\Oauth\Middleware\JKBrule::class]
+            | eg. [App\Http\Middleware\Foo::class,App\Http\Middleware\Bar::classs]
             */
-            'before_auth' => [\App\Api\Oauth\Middleware\OringinCheck::class],
+            'before_auth' => [\Fengxing2017\Oauth\Middleware\OringinCheck::class],
 
             /*
             |--------------------------------------------------------------------------
             | 验证前中间件
             |--------------------------------------------------------------------------
-            | 认证完成后在验证用户前触发自定义中间件
+            | 检索认证模型后验证用户前触发自定义中间件
             |
             */
             'before_check' => [],
