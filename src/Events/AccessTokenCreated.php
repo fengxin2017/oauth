@@ -5,13 +5,6 @@ namespace Fengxing2017\Oauth\Events;
 class AccessTokenCreated
 {
     /**
-     * Token.
-     *
-     * @var string
-     */
-    public $token;
-
-    /**
      * 认证模型ID.
      *
      * @var string
@@ -19,22 +12,36 @@ class AccessTokenCreated
     public $userId;
 
     /**
-     * 驱动
+     * Token.
      *
      * @var string
+     */
+    public $token;
+
+    /**
+     * @var string
+     */
+    public $guard;
+
+    /**
+     * 驱动
+     *
+     * @var string database|cache
      */
     public $driver;
 
     /**
      * @param  string $token
      * @param  string $userId
+     * @param  string $guard
      * @param  string $driver
      * @return void
      */
-    public function __construct($token, $userId, $driver)
+    public function __construct($token, $userId, $guard, $driver)
     {
         $this->userId = $userId;
         $this->token = $token;
+        $this->guard = $guard;
         $this->driver = $driver;
     }
 }

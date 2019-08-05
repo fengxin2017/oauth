@@ -16,14 +16,20 @@ class UserProvider implements Provider
     public $token = 'token';
 
     /**
-     * @var
+     * For Respect
+     * @var string
      */
-    public $driver;
+    public $jwtKey = 'Fantastic-Taylor-Otwell';
+
+    /**
+     * @var null
+     */
+    public $guard;
 
     /**
      * @var
      */
-    public $jwtKey;
+    public $driver;
 
     /**
      * @var
@@ -38,25 +44,25 @@ class UserProvider implements Provider
     /**
      * UserProvider constructor.
      */
-    public function __construct()
+    public function __construct($guard = null)
     {
+        $this->guard = $guard;
         $this->initConfig();
         $this->initMethodName();
     }
 
     /**
-     * 初始化配置属性
+     * init Config
      */
     private function initConfig()
     {
-        $this->driver = config('jkb.driver', 'database');
-        $this->jwtKey = config('jkb.jwt_key', 'Fantastic.Taylor.Otwell');
-        $this->cacheTag = config('jkb.cache_tag');
+        $this->driver = config('jkb.guards.' . $this->guard . '.driver', 'database');
+        $this->cacheTag = config('jkb.guards.' . $this->guard . '.cache_tag');
         $this->oauthModel = config('jkb.oauth_model');
     }
 
     /**
-     * 初始化驱动方法名
+     * init MethodName
      */
     private function initMethodName()
     {
@@ -117,18 +123,18 @@ class UserProvider implements Provider
     }
 
     /**
-     * 获取数据库认证用户
      * @param $accessToken
      * @return null
      */
     private function getDatabaseUser($accessToken)
     {
         try {
-            if (!($jkbOauthToken = $this->oauthModel::whereToken($accessToken)->first())) {
-                return null;
-            }
-
-            if (Carbon::now()->timestamp > Carbon::parse($jkbOauthToken->expired_at)->timestamp) {
+            if (
+            !($jkbOauthToken = $this->oauthModel::whereToken($accessToken)
+                ->whereGuard($this->guard)
+                ->where('expired_at', '>', Carbon::now())
+                ->first())
+            ) {
                 return null;
             }
 
@@ -140,16 +146,18 @@ class UserProvider implements Provider
     }
 
     /**
-     * 获取缓存认证用户
      * @param $accessToken
      * @return null
      */
     private function getCacheUser($accessToken)
     {
         try {
-            $jwt = $this->getJWTOrigin($accessToken);
+            $jwt = JWT::decode($accessToken, $this->jwtKey, ['HS256']);
 
-            if ($accessToken != $this->accessTokenByCachekey($jwt->cache_key)) {
+            if (
+                $accessToken != $this->accessTokenByCachekey($jwt->cache_key)
+                || $jwt->guard != $this->guard
+            ) {
                 return null;
             }
 
@@ -160,17 +168,6 @@ class UserProvider implements Provider
     }
 
     /**
-     * 提取jwt数据
-     * @param $accessToken
-     * @return object
-     */
-    private function getJWTOrigin($accessToken)
-    {
-        return JWT::decode($accessToken, $this->jwtKey, ['HS256']);
-    }
-
-    /**
-     * 通过jwt获取缓存数据
      * @param $cacheKey
      * @return mixed
      */

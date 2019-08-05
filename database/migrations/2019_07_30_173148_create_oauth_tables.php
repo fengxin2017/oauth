@@ -16,7 +16,9 @@ class CreateOauthTables extends Migration
         Schema::create(config('jkb.database_table_name'), function (Blueprint $table) {
             $table->string('token', 200)->primary();
             $table->integer('role_id');
-            $table->string('role_class', 50);
+            $table->string('guard',100);
+            $table->text('scope');
+            $table->string('role_class', 100);
             $table->dateTime('expired_at');
             $table->timestamps();
         });
