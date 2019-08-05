@@ -50,7 +50,9 @@ $user = Wechat::where('open_id',$openId)->user;
 
 ```
 // Fengxing2017\Oauth\Facade\Oauth
-Oauth::generateTokenFor($user, 'jkb'); // Oauth::setGuard('jkb')->generateTokenFor($user);
+
+Oauth::generateTokenFor($user, 'jkb'); 
+// Oauth::setGuard('jkb')->generateTokenFor($user);
 ```
 
 > 客户端携带token发起请求。
