@@ -12,7 +12,7 @@ class DeleteExpireToken extends Command
      *
      * @var string
      */
-    protected $signature = 'jkb:clear';
+    protected $signature = 'jkb:clear {--tag=}';
 
     /**
      * The console command description.
@@ -26,8 +26,10 @@ class DeleteExpireToken extends Command
      */
     public function handle()
     {
-        config('jkb.oauth_model')::where('expired_at', '<', Carbon::now())->delete();
-
-        $this->info("clear successfully.");
+        if ($this->option('tag') == 'de') {
+            config('jkb.oauth_model')::where('expired_at', '<', Carbon::now())->delete();
+            $this->info("clear successfully.");
+        }
+        $this->error('tag ' . $this->option . ' is invalid!');
     }
 }

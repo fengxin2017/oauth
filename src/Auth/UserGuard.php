@@ -23,27 +23,6 @@ class UserGuard implements Guard
     protected $inputKey;
 
     /**
-     * 守卫的名称
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var \Illuminate\Config\Repository|mixed
-     */
-    protected $shouldExcept;
-
-    /**
-     * @var \Illuminate\Config\Repository|mixed
-     */
-    protected $exceptHeaderKey;
-
-    /**
-     * @var \Illuminate\Config\Repository|mixed
-     */
-    protected $exceptHeaderLists;
-
-    /**
      * @var string
      */
     protected $token = 'token';
@@ -59,11 +38,7 @@ class UserGuard implements Guard
     {
         $this->request = $request;
         $this->provider = $provider;
-        $this->name = $name;
-        $this->inputKey = config('jkb.guards.' . $name . '.authorization_key', 'Authorization');
-        $this->shouldExcept = config('jkb.guards.' . $name . '.except', null);
-        $this->exceptHeaderKey = config('jkb.guards.' . $name . '.except_header_key', false);
-        $this->exceptHeaderLists = config('jkb.guards.' . $name . '.except_header_lists', []);
+        $this->inputKey = config('jkb.guards.' . $name . '.authorization_key');
     }
 
     /**
@@ -72,25 +47,7 @@ class UserGuard implements Guard
      */
     public function check()
     {
-        if ($this->shouldExcept()) {
-            return true;
-        }
         return !is_null($this->user());
-    }
-
-    /**
-     * 如果开启令牌验证header头信息
-     * @return bool
-     */
-    private function shouldExcept()
-    {
-        if (
-            $this->shouldExcept
-            && $this->exceptHeaderKey
-            && in_array($this->request->header($this->exceptHeaderKey), $this->exceptHeaderLists)
-        ) {
-            return true;
-        }
     }
 
     /**
@@ -101,6 +58,10 @@ class UserGuard implements Guard
     {
         if (!is_null($this->user)) {
             return $this->user;
+        }
+
+        if (!$this->request->hasHeader($this->inputKey)) {
+            return null;
         }
 
         return $this->user = $this->provider->retrieveByCredentials(
