@@ -13,13 +13,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Fengxing2017\\Oauth\\": "src"
+            "Fengxin2017\\Oauth\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Fengxing2017\\Oauth\\OauthServiceProvider"
+                "Fengxin2017\\Oauth\\OauthServiceProvider"
             ]
         }
     }

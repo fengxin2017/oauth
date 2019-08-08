@@ -1,6 +1,6 @@
 <?php
 
-namespace Fengxing2017\Oauth\Middleware;
+namespace Fengxin2017\Oauth\Middleware;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

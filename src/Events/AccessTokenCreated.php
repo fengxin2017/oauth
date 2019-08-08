@@ -1,6 +1,6 @@
 <?php
 
-namespace Fengxing2017\Oauth\Events;
+namespace Fengxin2017\Oauth\Events;
 
 class AccessTokenCreated
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Fengxing2017\Oauth;
+namespace Fengxin2017\Oauth;
 
-use Fengxing2017\Oauth\Auth\UserGuard;
-use Fengxing2017\Oauth\Auth\UserProvider;
-use Fengxing2017\Oauth\Console\DeleteExpireToken;
-use Fengxing2017\Oauth\Console\JkbCommons;
+use Fengxin2017\Oauth\Auth\UserGuard;
+use Fengxin2017\Oauth\Auth\UserProvider;
+use Fengxin2017\Oauth\Console\DeleteExpireToken;
+use Fengxin2017\Oauth\Console\JkbCommons;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 

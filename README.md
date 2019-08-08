@@ -32,7 +32,7 @@ $ php artisan migrate
 <?php
 
 namespace App;
-use Fengxing2017\Oauth\Auth\Authenticatable;
+use Fengxin2017\Oauth\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 class User implements AuthenticatableContract
@@ -49,7 +49,7 @@ $user = Wechat::where('open_id',$openId)->user;
 > 调用Oauth门面类的generateTokenFor方法为认证模型颁发Token。
 
 ```
-// Fengxing2017\Oauth\Facade\Oauth
+// Fengxin2017\Oauth\Facade\Oauth
 
 Oauth::generateTokenFor($user, 'jkb'); 
 // Oauth::setGuard('jkb')->generateTokenFor($user);
@@ -58,17 +58,13 @@ Oauth::generateTokenFor($user, 'jkb');
 > 客户端携带token发起请求。
 
 ```
-// 请求头需携带  "Authorization":"颁发的token值"  "Authorization" 可根据配置中 authorization_key 做任意修改
+// 请求头请携带"Authorization":"颁发的token值"，"Authorization"可在配置中自行定义 。
 // 服务端路由，请保持中间件中auth使用的值与生成Token时使用的guard值相同
 Route::middleware('auth:jkb')->get('/user',function(){
     dd(request()->user());
 });
 
 ```
-
-## 赦免令牌
-
-> 开启赦免令牌可绕过系统认证，针对某种特殊人群你可以自定义认证。配置文件中修改 except => true 请求头携带k => v，如果k和配置中except_header_key的值相同并且v是在配置except_header_lists数组中，则可以绕过系统认证 。
 
 ## 关于守卫
 
@@ -80,7 +76,7 @@ Route::middleware('auth:jkb')->get('/user',function(){
 
 ## 认证前中间件
 
-> 在检索认证模型前会触发配置中before_auth中间件组。已内置域名验证中间件，如不想使用可以移除
+> 在检索认证模型前会触发配置中before_auth中间件组。已内置域名验证中间件，如不想使用可以移除。
 
 ## 验证前中间件
 
@@ -89,12 +85,12 @@ Route::middleware('auth:jkb')->get('/user',function(){
 ## 生成Token会触发一个事件。
 
 ```
-Fengxing2017\Oauth\Events\AccessTokenCreated::class
+Fengxin2017\Oauth\Events\AccessTokenCreated::class
 ```
 
 ## 删除数据库过期Token
 ```
-php artisan jkb:clear
+php artisan jkb:clear --tag=de
 ```
 
 ## Contributing

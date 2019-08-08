@@ -53,7 +53,7 @@ return [
             | 可以在认证前触发自定义中间件
             | eg. [App\Http\Middleware\Foo::class,App\Http\Middleware\Bar::classs]
             */
-            'before_auth' => [\Fengxing2017\Oauth\Middleware\OringinCheck::class],
+            'before_auth' => [\Fengxin2017\Oauth\Middleware\OringinCheck::class],
 
             /*
             |--------------------------------------------------------------------------
@@ -132,7 +132,7 @@ return [
             | 可以在认证前触发自定义中间件。
             | eg. [App\Http\Middleware\Foo::class,App\Http\Middleware\Bar::classs]
             */
-            'before_auth' => [\Fengxing2017\Oauth\Middleware\OringinCheck::class],
+            'before_auth' => [\Fengxin2017\Oauth\Middleware\OringinCheck::class],
 
             /*
             |--------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fengxing2017\Oauth\Console;
+namespace Fengxin2017\Oauth\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;

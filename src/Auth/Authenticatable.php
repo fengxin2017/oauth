@@ -1,6 +1,6 @@
 <?php
 
-namespace Fengxing2017\Oauth\Auth;
+namespace Fengxin2017\Oauth\Auth;
 
 trait Authenticatable
 {

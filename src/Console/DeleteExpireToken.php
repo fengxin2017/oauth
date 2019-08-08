@@ -1,6 +1,6 @@
 <?php
 
-namespace Fengxing2017\Oauth\Console;
+namespace Fengxin2017\Oauth\Console;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;

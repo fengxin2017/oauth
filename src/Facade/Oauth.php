@@ -1,8 +1,8 @@
 <?php
 
-namespace Fengxing2017\Oauth\Facade;
+namespace Fengxin2017\Oauth\Facade;
 
-use Fengxing2017\Oauth\OauthManager;
+use Fengxin2017\Oauth\OauthManager;
 use Illuminate\Support\Facades\Facade;
 
 class Oauth extends Facade

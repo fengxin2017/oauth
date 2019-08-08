@@ -1,9 +1,9 @@
 <?php
 
-namespace Fengxing2017\Oauth;
+namespace Fengxin2017\Oauth;
 
 use Carbon\Carbon;
-use Fengxing2017\Oauth\Events\AccessTokenCreated;
+use Fengxin2017\Oauth\Events\AccessTokenCreated;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
