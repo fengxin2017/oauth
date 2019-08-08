@@ -142,8 +142,8 @@ class OauthServiceProvider extends ServiceProvider
     private function vendorPublish()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([__DIR__ . '/config' => config_path()], 'jkb-oauth-config');
-            $this->publishes([__DIR__ . '/database/migrations' => database_path('migrations')], 'jkb-oauth-migrations');
+            $this->publishes([__DIR__ . '/../config' => config_path()], 'jkb-oauth-config');
+            $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], 'jkb-oauth-migrations');
         }
     }
 
