@@ -23,7 +23,7 @@ class OauthServiceProvider extends ServiceProvider
      * middleware groups
      * @var
      */
-    protected $middlewareGroups;
+    protected $middlewareGroups = [];
 
     /**
      * 注册相关服务
