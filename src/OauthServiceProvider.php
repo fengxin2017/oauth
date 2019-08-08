@@ -53,7 +53,7 @@ class OauthServiceProvider extends ServiceProvider
      */
     protected function setJkbAuthConfig()
     {
-        foreach (config('jkb.guards') as $guardName => $guradConfig) {
+        foreach (config('jkb.guards', []) as $guardName => $guradConfig) {
             config(array_dot([
                 'guards' => [
                     $guardName => [
@@ -77,7 +77,7 @@ class OauthServiceProvider extends ServiceProvider
      */
     protected function initMiddlewareGroups()
     {
-        foreach (config('jkb.guards') as $guardName => $guardConfig) {
+        foreach (config('jkb.guards', []) as $guardName => $guardConfig) {
             foreach ($guardConfig['before_auth'] as $middleware) {
                 $this->middlewareGroups[$guardName][] = $middleware . ':' . $guardName;
             }
