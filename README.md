@@ -6,7 +6,7 @@
 ## 安装
 
 ```shell
-$ composer require fengxing2017/oauth -vvv
+$ composer require fengxin2017/oauth -vvv
 ```
 
 ## 发布配置
