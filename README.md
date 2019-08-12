@@ -24,7 +24,7 @@ $ php artisan migrate
 
 > 基于三方登录（微信，微博，QQ，手机登录）的mini-oauth 认证体系。
 
-> 比如配置中使用的guard是'jkb'。
+> 比如配置中使用的auth_middleware_groups是'jkb'。
 
 > 首先认证模型需要添加Authenticatable，当然你使用laravel自带的Illuminate\Auth\Authenticatable也是没问题的。
 
@@ -60,7 +60,7 @@ Oauth::generateTokenFor($user, 'jkb');
 ```
 // 请求头请携带"Authorization":"颁发的token值"，"Authorization"可在配置中自行定义 。
 // 服务端路由，请保持中间件中auth使用的值与生成Token时使用的guard值相同
-Route::middleware('auth:jkb')->get('/user',function(){
+Route::middleware('jkb')->get('/user',function(){
     dd(request()->user());
 });
 

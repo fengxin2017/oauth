@@ -31,9 +31,7 @@ class OauthServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerOauthManager();
-        $this->setJkbAuthConfig();
-        $this->initMiddlewareGroups();
-        $this->registerMiddlewareGroups();
+        $this->init();
         $this->commands($this->commands);
     }
 
@@ -48,43 +46,58 @@ class OauthServiceProvider extends ServiceProvider
     }
 
     /**
-     * 初始化认证配置
-     * @return void
+     * 初始化
      */
-    protected function setJkbAuthConfig()
+    protected function init()
     {
-        foreach (config('jkb.guards', []) as $guardName => $guradConfig) {
-            config(array_dot([
-                'guards' => [
-                    $guardName => [
-                        'driver'   => 'jkb-guard',
-                        'provider' => $guardName,
-                    ]
-                ],
-
-                'providers' => [
-                    $guardName => [
-                        'driver' => 'jkb-provider',
-                        'use'    => $guardName
-                    ],
-                ],
-            ], 'auth.'));
+        foreach (config('jkb.auth_middleware_groups', []) as $group => $config) {
+            $this->initJkbAuthConfig($group);
+            $this->initMiddlewareGroups($group, $config);
         }
+
+        $this->registerMiddlewareGroups();
+    }
+
+    /**
+     * 初始化认证配置
+     *
+     * @param $group
+     */
+    protected function initJkbAuthConfig($group)
+    {
+        config(array_dot([
+            'guards' => [
+                $group => [
+                    'driver'   => 'jkb-guard',
+                    'provider' => $group,
+                ]
+            ],
+
+            'providers' => [
+                $group => [
+                    'driver' => 'jkb-provider',
+                    'use'    => $group
+                ],
+            ],
+        ], 'auth.'));
     }
 
     /**
      * 初始化中间件组
+     *
+     * @param $group
+     * @param $config
      */
-    protected function initMiddlewareGroups()
+    protected function initMiddlewareGroups($group, $config)
     {
-        foreach (config('jkb.guards', []) as $guardName => $guardConfig) {
-            foreach ($guardConfig['before_auth'] as $middleware) {
-                $this->middlewareGroups[$guardName][] = $middleware . ':' . $guardName;
-            }
-            $this->middlewareGroups[$guardName][] = 'auth:' . $guardName;
-            foreach ($guardConfig['before_check'] as $middleware) {
-                $this->middlewareGroups[$guardName][] = $middleware . ':' . $guardName;
-            }
+        foreach ($config['before_auth'] as $middleware) {
+            $this->middlewareGroups[$group][] = $middleware . ':' . $group;
+        }
+
+        $this->middlewareGroups[$group][] = 'auth:' . $group;
+
+        foreach ($config['before_check'] as $middleware) {
+            $this->middlewareGroups[$group][] = $middleware . ':' . $group;
         }
     }
 
@@ -93,8 +106,8 @@ class OauthServiceProvider extends ServiceProvider
      */
     protected function registerMiddlewareGroups()
     {
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            app('router')->middlewareGroup($key, $middleware);
+        foreach ($this->middlewareGroups as $name => $middlewareGroup) {
+            app('router')->middlewareGroup($name, $middlewareGroup);
         }
     }
 

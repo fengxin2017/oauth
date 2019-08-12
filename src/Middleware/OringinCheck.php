@@ -7,9 +7,16 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class OringinCheck
 {
-    public function handle(Request $request, \Closure $next, $guard)
+    /**
+     * @param Request $request
+     * @param \Closure $next
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function handle(Request $request, \Closure $next, $name)
     {
-        if (!!array_intersect(['*', $this->getOrigin($request)], $this->getAllowedOrigins($guard))) {
+        if (!!array_intersect(['*', $this->getOrigin($request)], $this->getAllowedOrigins($name))) {
             return $next($request);
         }
 
@@ -18,6 +25,7 @@ class OringinCheck
 
     /**
      * @param Request $request
+     *
      * @return array|string
      */
     private function getOrigin(Request $request)
@@ -26,11 +34,13 @@ class OringinCheck
     }
 
     /**
-     * @return \Illuminate\Config\Repository|mixed
+     * @param $name
+     *
+     * @return mixed
      */
-    private function getAllowedOrigins($guard)
+    private function getAllowedOrigins($name)
     {
-        return config('jkb.guards.' . $guard . '.allowed_origins');
+        return config('jkb.auth_middleware_groups.' . $name . '.allowed_origins');
     }
 
 }
