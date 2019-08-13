@@ -85,7 +85,7 @@ class OauthManager
         $this->dirver = config('jkb.guards.' . $this->guard . '.driver', 'database');
         $this->cacheTag = config('jkb.guards.' . $this->guard . '.cache_tag', $this->guard);
         $this->reToken = config('jkb.guards.' . $this->guard . '.retoken', true);
-        $this->expireTime = Carbon::now()->addSeconds(config('jkb.guards.' . $this->guard . '.cache_expire_time'), 3600);
+        $this->expireTime = Carbon::now()->addSeconds(config('jkb.guards.' . $this->guard . '.cache_expire_time',3600));
         $this->oauthModel = config('jkb.oauth_model');
     }
 
