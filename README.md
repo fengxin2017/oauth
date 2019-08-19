@@ -19,6 +19,7 @@ $ php artisan vendor:publish
 $ php artisan migrate
 ```
 
+## 创建配置中oauth_model对应的模型
 
 ## 如何使用
 
@@ -44,7 +45,7 @@ class User implements AuthenticatableContract
 > 根据第三方返回信息(比如微信的open_id之类的检索出需要认证的模型)。
 
 ```
-$user = Wechat::where('open_id',$openId)->user;
+$user = Wechat::where('open_id',$openId)->first()->user;
 ```
 > 调用Oauth门面类的generateTokenFor方法为认证模型颁发Token。
 
@@ -101,7 +102,7 @@ You can contribute in one of three ways:
 2. Answer questions or fix bugs on the [issue tracker](https://github.com/fengxin2017/oauth/issues).
 3. Contribute new features or update the wiki.
 
-_The code contribution process is not very formal. You just need to make sure that you follow the PSR-0, PSR-1, and PSR-2 coding guidelines. Any new code contributions must be accompanied by unit tests where applicable._
+_The code contribution process is not very formal. You just need to make sure that you follow the PSR-4 coding guidelines. Any new code contributions must be accompanied by unit tests where applicable._
 
 ## License
 
