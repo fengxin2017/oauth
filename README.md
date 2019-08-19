@@ -25,7 +25,7 @@ $ php artisan migrate
 
 > 基于三方登录（微信，微博，QQ，手机登录）的mini-oauth 认证体系。
 
-> 比如配置中使用的auth_middleware_groups是'jkb'。
+> 比如配置中使用的auth_middleware_groups是'foo'。
 
 > 首先认证模型需要添加Authenticatable，当然你使用laravel自带的Illuminate\Auth\Authenticatable也是没问题的。
 
@@ -52,24 +52,32 @@ $user = Wechat::where('open_id',$openId)->first()->user;
 ```
 // Fengxin2017\Oauth\Facade\Oauth
 
-Oauth::generateTokenFor($user, 'jkb'); 
-// Oauth::setGuard('jkb')->generateTokenFor($user);
+Oauth::generateTokenFor($user, 'foo'); 
+// Oauth::setGuard('foo')->generateTokenFor($user);
 ```
 
-> 客户端携带token发起请求。
+> 客户端支持get、post、header携带token发起请求。
 
 ```
-// 请求头请携带"Authorization":"颁发的token值"，"Authorization"可在配置中自行定义 。
-// 服务端路由，请保持中间件中auth使用的值与生成Token时使用的guard值相同
-Route::middleware('jkb')->get('/user',function(){
+// 客户端
+axios.get('foo',{
+    headers: {'Authorization': this.token}//设置header信息
+}).then( res => {
+    //
+}).catch( error => {
+    //
+})
+
+// 服务端
+Route::middleware('foo')->get('/user',function(){
     dd(request()->user());
 });
 
 ```
 
-## 关于守卫
+## 认证中间件组
 
-> Guards可以配置多个，互不干扰。
+> 可以配置多个，互不干扰。
 
 ## 关于token存储
 
