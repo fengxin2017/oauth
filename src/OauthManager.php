@@ -28,7 +28,7 @@ class OauthManager
     /**
      * @var
      */
-    public $expireTime;
+    public $expiredAt;
 
     /**
      * @var
@@ -82,10 +82,10 @@ class OauthManager
      */
     private function initConfig()
     {
-        $this->dirver = config('jkb.guards.' . $this->guard . '.driver', 'database');
-        $this->cacheTag = config('jkb.guards.' . $this->guard . '.cache_tag', $this->guard);
-        $this->reToken = config('jkb.guards.' . $this->guard . '.retoken', true);
-        $this->expireTime = Carbon::now()->addSeconds(config('jkb.guards.' . $this->guard . '.cache_expire_time',3600));
+        $this->dirver = config('jkb.auth_middleware_groups.' . $this->guard . '.driver', 'database');
+        $this->cacheTag = config('jkb.auth_middleware_groups.' . $this->guard . '.cache_tag', $this->guard);
+        $this->reToken = config('jkb.auth_middleware_groups.' . $this->guard . '.retoken', true);
+        $this->expiredAt = Carbon::now()->addSeconds(config('jkb.auth_middleware_groups.' . $this->guard . '.cache_expire_time',3600));
         $this->oauthModel = config('jkb.oauth_model');
     }
 
@@ -179,7 +179,7 @@ class OauthManager
             'role_id'    => $role->id,
             'role_class' => $roleClass,
             'guard'      => $this->guard,
-            'expired_at' => $this->expireTime
+            'expired_at' => $this->expiredAt
         ]);
     }
 
@@ -190,7 +190,7 @@ class OauthManager
      */
     private function storeCacheToken($token, $role, $roleClass)
     {
-        Cache::tags([$this->cacheTag])->put($roleClass . '@' . $role->id . '@' . $this->guard, $token, $this->expireTime);
+        Cache::tags([$this->cacheTag])->put($roleClass . '@' . $role->id . '@' . $this->guard, $token, $this->expiredAt);
     }
 
     /**

@@ -57,7 +57,7 @@ class UserProvider implements Provider
     private function initConfig()
     {
         $this->driver = config('jkb.auth_middleware_groups.' . $this->guard . '.driver', 'database');
-        $this->cacheTag = config('jkb.auth_middleware_groups.' . $this->guard . '.cache_tag');
+        $this->cacheTag = config('jkb.auth_middleware_groups.' . $this->guard . '.cache_tag', $this->guard);
         $this->oauthModel = config('jkb.oauth_model');
     }
 
