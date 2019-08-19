@@ -25,7 +25,7 @@ $ php artisan migrate
 
 > 基于三方登录（微信，微博，QQ，手机登录）的mini-oauth 认证体系。
 
-> 比如配置中使用的auth_middleware_groups是'foo'。
+> 比如配置中使用的auth_middleware_groups是foo。
 
 > 首先认证模型需要添加Authenticatable，当然你使用laravel自带的Illuminate\Auth\Authenticatable也是没问题的。
 
@@ -60,7 +60,7 @@ Oauth::generateTokenFor($user, 'foo');
 
 ```
 // 客户端
-axios.get('foo',{
+axios.get('https://api.jkb.cn/getUser',{
     headers: {'Authorization': this.token}//设置header信息
 }).then( res => {
     //
@@ -69,7 +69,7 @@ axios.get('foo',{
 })
 
 // 服务端
-Route::middleware('foo')->get('/user',function(){
+Route::middleware('foo')->get('/getUser',function(){
     dd(request()->user());
 });
 
