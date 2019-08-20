@@ -2,6 +2,9 @@
 
 <p align="center"> A simple oauth for laravel-project.</p>
 
+## 简介
+
+> 基于三方登录（微信，微博，QQ，手机）mini-oauth 认证体系。
 
 ## 安装
 
@@ -20,11 +23,11 @@ $ php artisan migrate
 ```
 
 ## 创建配置中oauth_model对应的模型
+```
+$ php artisan make:model JkbOauthToken
+```
 
 ## 如何使用
-
-> 基于三方登录（微信，微博，QQ，手机登录）的mini-oauth 认证体系。
-
 > 比如配置中使用的auth_middleware_groups是foo。
 
 > 首先认证模型需要添加Authenticatable，当然你使用laravel自带的Illuminate\Auth\Authenticatable也是没问题的。
